@@ -17,8 +17,10 @@ def storageManager():
 
     if request.method == 'POST':
         file = request.files['file']
-        file.save(os.path.join('storage', secure_filename(file.filename)))
+        file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
         return jsonify(True)
+
+    return jsonify(False)
 
 @app.route('/files/<name>/', methods=['GET', 'DELETE'])
 def storageInteraction(name):
@@ -27,6 +29,8 @@ def storageInteraction(name):
     
     if request.method == 'DELETE':
         return jsonify(s.deleteFile(name))
+
+    return jsonify(False)
 
 if __name__ == '__main__':
     app.run()
