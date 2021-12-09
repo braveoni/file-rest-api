@@ -1,6 +1,4 @@
 import os
-from pathlib import Path
-import requests
 
 class Storage:
     def __init__(self) -> None:
@@ -15,20 +13,20 @@ class Storage:
             
             num /= 1024.0
     
-    def getFiles(self):
+    def get_files(self):
         return [{name: str(self.convert(os.stat(os.path.join(self.__path, name)).st_size))} for name in os.listdir(self.__path)]
 
-    def getFile(self, name):
+    def get_file(self, name):
         return os.path.join(self.__path + name)
 
-    def deleteFile(self, name: str):
+    def delete_file(self, name: str):
         try:
             os.remove(os.path.join(self.__path, name))
             return True
         except FileNotFoundError:
             return False
 
-    def uploadFile(self, file):
+    def upload_file(self, file):
         if file.filename != ' ':
             file.save(os.path.join(self.__path + file.filename))
             return True

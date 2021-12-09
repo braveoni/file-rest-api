@@ -11,7 +11,7 @@ def index():
     return {'Hello': 'Bro!'}
 
 @app.route('/files/', methods=['GET', 'POST'])
-def storageManager():
+def storage_manager():
     if request.method == 'GET':
         return jsonify(s.getFiles())
 
@@ -23,7 +23,7 @@ def storageManager():
     return jsonify(False)
 
 @app.route('/files/<name>/', methods=['GET', 'DELETE'])
-def storageInteraction(name):
+def storage_interaction(name):
     if request.method == 'GET':
         return send_from_directory(app.config['UPLOAD_PATH'], name)
     
