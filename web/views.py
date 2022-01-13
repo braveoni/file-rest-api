@@ -1,17 +1,13 @@
-import os
-import json
-import sys
-from app import app
 from flask import request, send_from_directory
-from werkzeug.utils import secure_filename
-
-UPLOAD_FOLDER = '/storage'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+import os
+from . import app
+import utils
 
 
 @app.route('/')
 def index():
     return 'Hello!'
+
 
 @app.route('/files', methods=['POST'])
 def files_post():
@@ -19,10 +15,8 @@ def files_post():
         return {'response': 'empty request attach the file'}, 400
 
     file = request.files['file']
-    if allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return {'response': 'file successfully uploaded'}, 201
+    if utils.allowed_file(file.filename):
+        utils.save_file(file)
     else:
         return {'response': 'not acceptable file name'}, 406
 
@@ -57,8 +51,3 @@ def delete_file(name):
     else:
         os.remove(app.config['UPLOAD_FOLDER']+name)
         return {'response': f'{name} - file deleted'}, 200
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
